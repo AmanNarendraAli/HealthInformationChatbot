@@ -1,0 +1,11 @@
+Important disease sections to keep:
+Summary
+Signs and Symptoms
+Prognosis
+Cause
+Transmission
+Diagnosis
+Prevention
+Epidemiology
+Management
+Treatment
