@@ -1,25 +1,29 @@
-from embeddings import check_for_embeddings, create_embeddings
-from chain import build_chain
+from fastapi import FastAPI
+from langserve import add_routes
+from med_assist.chain import build_chain
+from dotenv import load_dotenv
+from med_assist.components.embeddings import check_for_embeddings, create_embeddings
 
-def main():
-    # Check if embeddings exist
-    if not check_for_embeddings():
-        print("Embeddings not found. Creating embeddings...")
-        create_embeddings()
-    else:
-        print("Embeddings found.")
+load_dotenv()
 
-    # Build the RAG chain
-    rag_chain = build_chain()
+app = FastAPI(
+    title="med_assist",
+    version="0.2.0",
+    description="Medical assistant API"
+)
 
-    # Main interaction loop
-    while True:
-        question = input("Enter your question (or 'quit' to exit): ")
-        if question.lower() == 'quit':
-            break
+if not check_for_embeddings():
+    create_embeddings()
 
-        answer = rag_chain.invoke({"question": question})
-        print("Answer:", answer)
+chain = build_chain()
+
+add_routes(
+    app=app,
+    runnable=chain,
+    path="/med_assist"
+)
 
 if __name__ == "__main__":
-    main()
+    import uvicorn
+
+    uvicorn.run(app, host="0.0.0.0", port=8000)
