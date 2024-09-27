@@ -18,4 +18,8 @@ flash_attn
 tensorflow[and-cuda]
 tf-keras
 accelerate
+transformers
+torch
+datasets
+
 
